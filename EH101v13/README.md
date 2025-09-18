@@ -18,12 +18,13 @@ Initial foothold via web file upload (RCE) -> root via PATH hijacking of a privi
 ### 1) Reconnaissance
 ```bash
 nmap -sC -sV -p- <TARGET_IP>
+```
 Found open services: port 21 (FTP), port 80 (HTTP).
 
 2) Web enumeration
-
+```
 gobuster dir -u http://<TARGET_IP> -w /usr/share/wordlists/dirb/common.txt
-
+```
 Found /admin → login page.
 3) Credential discovery / login
 
@@ -40,13 +41,13 @@ Accessing uploaded file URL triggered execution.
 5) Initial shell
 
 Payload gave shell as www-data.
-
+```bash
 id; uname -a; hostname
-
+```
 6) Privilege escalation
-
+```bash
 sudo -l
-
+```
 Showed www-data can run /usr/local/bin/backups.py as root without password.
 
 Script imported a module from writable path.
@@ -56,8 +57,9 @@ Script imported a module from writable path.
 Place malicious module in writable directory.
 
 Run:
+```bash
 sudo /usr/local/bin/backups.py
-
+```
 Root shell obtained.
 
 Artifacts
@@ -78,5 +80,8 @@ Avoid scripts importing from writable paths.
 # MALICIOUS HELPER - SANITIZED EXAMPLE
 # DO NOT USE outside controlled labs.
 import os
+print("SANITIZED: would spawn a root shell here")
+# os.system("/bin/bash")  # commented out for safety
+```
 print("SANITIZED: would spawn a root shell here")
 # os.system("/bin/bash")  # commented out for safety
