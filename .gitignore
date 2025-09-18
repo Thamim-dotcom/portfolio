@@ -1,0 +1,12 @@
+# system files
+.DS_Store
+*.log
+
+# secrets
+*.pem
+*.key
+.env
+
+# editor
+.vscode/
+.idea/
